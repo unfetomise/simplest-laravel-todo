@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <title></title>
+		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+        </script>
+
+    </head>
+
+    <body>
+        
+        <!-- https://www.youtube.com/watch?v=DJjenhzqBHk -->
+        <div class="container flex flex-column justify-center justify-items align-items">
+		<div class="" x-data="{ todos : [], userInput: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'}">
+            <form @submit.prevent class="m-4 w-full">
+                <input x-model="userInput" placeholder="Enter todo item" type="text" class="m-2 p-2 border border-cyan-400">
+                <button
+                 @click="if(userInput.trim().length)
+                    todos.push({name: userInput, completed: false})"
+                    class="p-2 m-2 bg-green-400 rounded text-white">Добавить
+                </button>
+                <button @click="todos = []" x-show="todos.length"
+                class="p-2 m-2 bg-red-400 rounded text-white">Очистить все</button>
+                
+            </form>
+        <table class="table-auto m-auto">
+            <template x-for="todo in todos">
+                    <tr class="bg-gray-50">
+                    <td><input class="h-8 w-8" type="checkbox" x-model="todo.completed"></td>
+                    <td><span class="m-2 p-2 font-bold" x-text="todo.name" :class="{'line-through': todo.completed}"></span></td>
+                    <td><button class="inline-flex items-center p-2 m-1 bg-red-400 hover:bg-red-700 text-white rounded font-bold"
+                     @click="todos = todos.filter((item) => item != todo)">X</button></td>
+                    </tr>
+            </template>
+        </table>
+            
+
+            <div>
+                <span x-text="todos.filter((todo) => todo.completed).length"></span> /
+                <span x-text="todos.length"></span> completed   
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
