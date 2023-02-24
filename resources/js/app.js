@@ -9,7 +9,7 @@ wrapper.addEventListener('click', (event) => {
     return;
   }
 
-  confirm("Вы уверены?") ? event.target.parentNode.submit() : console.log(false)
+  confirm("Подтвердить удаление?") ? event.target.parentNode.submit() : console.log(false)
 
   ;
 })
