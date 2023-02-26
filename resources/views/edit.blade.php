@@ -17,7 +17,7 @@
     @endif
 </div>
 
-    <form action="/update/{{ $todo->id }}" method="post" class="mt-4 p-4">
+    <form action="/todos/{{ $todo->id }}" method="post" class="mt-4 p-4">
         @csrf
         @method('PATCH')
         <div class="form-group m-3">

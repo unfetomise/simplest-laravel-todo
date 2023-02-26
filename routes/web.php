@@ -1,15 +1,47 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TodosController;
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 
-Route::get('/offline', [TodosController::class, 'offline']);
-Route::get('/', [TodosController::class, 'index']);
-Route::post('/store', [TodosController::class, 'store']);
-Route::post('/{id}', [TodosController::class, 'toggleCompleted']);
-Route::get('/edit/{id}', [TodosController::class, 'edit']);
-Route::patch('/update/{id}', [TodosController::class, 'update']);
-Route::delete('/destroy/{id}', [TodosController::class, 'destroy']);
-#Route::show('/show/{id}', [TodosController::class, 'show']);
-Route::resource('/', TodosController::class);
+Route::get('/', function () {
+    return view('welcome');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+/*
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+ 
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+ 
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+*/
+Route::view('/todos/offline', 'offline');
+
+Route::post('/todos/{id}/toggle', [TodosController::class, 'toggleCompleted'])->where('id', '[0-9]+')->middleware('auth');
+
+Route::resource('todos', TodosController::class)->middleware('auth');
+
+Route::post('logout', [UsersController::class, 'logout'])->name('logout');

@@ -19,21 +19,25 @@
             font-family: 'Nunito';
         }
     </style>
-    @vite('resources/js/app.js')
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
 <nav class="bg-gray-50">
     <div class="container flex flex-row justify-between">
         <div class="flex flex-row">
-            <div><a href="/"><span class="p-2 mx-2 my-2 bg-gray-400 hover:bg-gray-500 text-white rounded w-max flex font-bold">Todos</span></a></div>
-            <div><a href="/offline"><span class="p-2 mx-2 my-2 bg-gray-400 hover:bg-gray-500 text-white rounded w-max flex font-bold">Offline</span></a></div>
+            <div><a href="/todos"><span class="p-2 mx-2 my-2 bg-gray-400 hover:bg-gray-500 text-white rounded w-max flex font-bold">Todos</span></a></div>
+            <div><a href="/todos/offline"><span class="p-2 mx-2 my-2 bg-gray-400 hover:bg-gray-500 text-white rounded w-max flex font-bold">Offline</span></a></div>
         </div>
-        <div><a href="/create"><span class="p-2 ml-2 my-2 bg-green-400 hover:bg-green-500 text-white rounded w-max flex justify-center font-bold">Создать Todo</span></a></div>
-        <div class="hidden flex flex-row">
-            <div><a href="/login"><span class="w-24 p-2 mx-2 my-2 bg-green-400 hover:bg-green-500 text-white rounded flex justify-center font-bold">Вход</span></a></div>
-            <div><a href="/register"><span class="w-28 p-2 px-3 mx-2 my-2 bg-green-400 hover:bg-green-500 text-white rounded flex justify-center font-bold">Регистрация</span></a></div>
+        <div><a href="/todos/create"><span class="p-2 ml-2 my-2 bg-green-400 hover:bg-green-500 text-white rounded w-max flex justify-center font-bold">Создать Todo</span></a></div>
+        
+        <div class="flex flex-row">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="w-24 p-2 mx-2 my-2 bg-red-300 hover:bg-red-500 text-white rounded flex justify-center font-bold">Logout</button>
+            </form>
         </div>
+        
     </div>
 </nav>
 

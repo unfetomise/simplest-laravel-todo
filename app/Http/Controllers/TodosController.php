@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Todo;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\StoreTodoRequest;
 
 class TodosController extends Controller
 {
@@ -13,7 +15,7 @@ class TodosController extends Controller
     public function index()
     {
         return view('index', [
-            'todos' => Todo::where('user_id', 1)->get()
+            'todos' => Todo::where('user_id', Auth::id())->get()
         ]);
     }
 
@@ -28,21 +30,17 @@ class TodosController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreTodoRequest $request)
     {
-        $request->validate([
-            'title' => 'required|max:60',
-            'description' => 'max:400',
-        ]);
+        $request->validated();
 
         Todo::create([
             'title' => $request->title,
             'description' => $request->description,
-            'user_id' => 1,
-            'completed' => 0,          
+            'user_id' => Auth::id(),  
         ]);
 
-        return redirect(route('index'));
+        return redirect('/todos');
     }
 
     /**
@@ -56,9 +54,13 @@ class TodosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(StoreTodoRequest $request, string $id)
     {
+        $request->validated();
+        #$todo = Todo::find($id);
+        #if(Gate::allows($todo)) abort(403);
         return view('edit')->with('todo', Todo::find($id));
+        #return $this->route('id');
     }
 
     /**
@@ -66,12 +68,15 @@ class TodosController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        Todo::where('id', $id)->update([
+        $todo = Todo::find($id);
+        if(Gate::allows($todo)) abort(403);
+
+        $todo->update([
             'title' => $request->title,
             'description' => $request->description ?? '',
         ]);
 
-        return redirect(route('index'));
+        return redirect('/todos');
     }
 
     /**
@@ -79,22 +84,23 @@ class TodosController extends Controller
      */
     public function destroy(string $id)
     {
+        $todo = Todo::find($id);
+        if(Gate::allows($todo)) abort(403);
+
         Todo::destroy($id);
 
-        return redirect(route('index'));
+        return redirect('/todos');
     }
 
     public function toggleCompleted($id)
     {
-        Todo::where('id', $id)->update([
+        $todo = Todo::find($id);
+        if(Gate::allows($todo)) abort(403);
+
+        $todo->update([
             'completed' => !Todo::find($id)->completed
         ]);
 
-        return redirect(route('index'));
-    }
-
-    public function offline()
-    {
-        return view('offline');
+        return redirect('/todos');
     }
 }

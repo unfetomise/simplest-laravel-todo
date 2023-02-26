@@ -19,7 +19,7 @@
         @endif
     </div>
 
-    <form action="/store" method="POST" class="mt-1 p-4 pt-1">
+    <form action="/todos" method="POST" class="mt-1 p-4 pt-1">
         @csrf
         <div class="form-group m-3">
             <label for="title">Todo title</label>

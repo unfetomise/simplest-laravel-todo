@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(App\Models\User::class)->constrained()->onDelete('cascade');
             $table->string('title');
             $table->tinyText('description')->nullable();
-            $table->boolean('completed');
+            $table->boolean('completed')->default('0');
             $table->timestamps();
         });
     }
@@ -29,7 +29,7 @@ return new class extends Migration
     {
         Schema::table('todos', function(Blueprint $table)
         {
-            $table->dropForeign('user_id');
+            $table->dropForeignIdFor(App\Models\User::class);
         });
         Schema::dropIfExists('todos');
     }
