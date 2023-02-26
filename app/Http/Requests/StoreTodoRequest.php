@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Gate;
 use App\Models\Todo;
 
 class StoreTodoRequest extends FormRequest
@@ -13,9 +12,8 @@ class StoreTodoRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        #$todo = Todo::find($this->route('id'));
-
-        return Gate::allows(Todo::find($this->route('id'))->user_id == $this->user->id);
+        $todo = $this->route('todo');
+        return $todo && $this->user()->can('update-todo', Todo::find($todo)) || true;
     }
 
     /**

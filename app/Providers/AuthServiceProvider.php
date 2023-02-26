@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        Gate::define('update-post', function (User $user, Todo $todo) {
+        Gate::define('update-todo', function (User $user, Todo $todo) {
             return $user->id === $todo->user_id;
         });
     }

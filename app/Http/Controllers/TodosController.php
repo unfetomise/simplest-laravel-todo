@@ -7,6 +7,7 @@ use App\Models\Todo;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StoreTodoRequest;
 
+
 class TodosController extends Controller
 {
     /**
@@ -54,24 +55,20 @@ class TodosController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(StoreTodoRequest $request, string $id)
+    public function edit(string $id)
     {
-        $request->validated();
-        #$todo = Todo::find($id);
-        #if(Gate::allows($todo)) abort(403);
-        return view('edit')->with('todo', Todo::find($id));
-        #return $this->route('id');
+        $todo = $this->todoAuthorize($id);
+        return view('edit')->with('todo', $todo);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(StoreTodoRequest $request, string $id)
     {
-        $todo = Todo::find($id);
-        if(Gate::allows($todo)) abort(403);
+        $request->validated();
 
-        $todo->update([
+        Todo::find($id)->update([
             'title' => $request->title,
             'description' => $request->description ?? '',
         ]);
@@ -84,23 +81,26 @@ class TodosController extends Controller
      */
     public function destroy(string $id)
     {
-        $todo = Todo::find($id);
-        if(Gate::allows($todo)) abort(403);
-
+        $this->todoAuthorize($id);
         Todo::destroy($id);
-
         return redirect('/todos');
     }
 
     public function toggleCompleted($id)
     {
-        $todo = Todo::find($id);
-        if(Gate::allows($todo)) abort(403);
+        $todo = $this->todoAuthorize($id);
 
         $todo->update([
             'completed' => !Todo::find($id)->completed
         ]);
 
         return redirect('/todos');
+    }
+
+    private function todoAuthorize($id)
+    {
+        $todo = Todo::find($id);
+        $todo && Gate::authorize('update-todo', $todo);
+        return $todo ?? abort(403);
     }
 }

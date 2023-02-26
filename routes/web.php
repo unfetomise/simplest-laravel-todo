@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\TodosController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TodosController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\ProfileController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::get('/', function () {
     return view('welcome');
