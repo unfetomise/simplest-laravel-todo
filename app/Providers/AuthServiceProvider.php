@@ -29,5 +29,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('update-todo', function (User $user, Todo $todo) {
             return $user->id === $todo->user_id;
         });
+
+        Gate::define('users-list', function (User $user) {
+            return $user->isAdmin;
+        });
     }
 }

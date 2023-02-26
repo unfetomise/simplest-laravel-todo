@@ -39,6 +39,9 @@ Route::post('/email/verification-notification', function (Request $request) {
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 */
+
+Route::get('users', [UsersController::class, 'users']);
+
 Route::view('/todos/offline', 'offline');
 
 Route::post('/todos/{id}/toggle', [TodosController::class, 'toggleCompleted'])->where('id', '[0-9]+')->middleware('auth');
@@ -46,3 +49,4 @@ Route::post('/todos/{id}/toggle', [TodosController::class, 'toggleCompleted'])->
 Route::resource('todos', TodosController::class)->middleware('auth');
 
 Route::post('logout', [UsersController::class, 'logout'])->name('logout');
+

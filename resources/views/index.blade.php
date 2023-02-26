@@ -7,7 +7,6 @@
     <div class="flex justify-center justify-items align-items h-screen">
         <div id="todos" class="my-5">
             <table class="table-auto">
-                {{ Auth::id() ?? 'none' }}
                     @foreach ($todos as $key => $todo)
                     <tr class="bg-gray-50">
                         <td><form action="/todos/{{ $todo->id }}/toggle" method="POST">
